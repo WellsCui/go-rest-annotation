@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"reflect"
+	"errors"
 
 	"github.com/gorilla/mux"
 )
@@ -26,10 +27,15 @@ func RegisterRoutes(router *mux.Router, handler any, handlerFile string) error {
 		}
 		method := handlerValue.MethodByName(route.HandlerMethod)
 		if !method.IsValid() {
-			return fmt.Errorf("method %s not found on handler %s", route.HandlerMethod, route.HandlerType)
+			return fmt.Errorf("method %s not found in handler %s", route.HandlerMethod, route.HandlerType)
 		}
-		httpHandler := createHTTPHandler(method, route)
-		httpHandler, err := ApplyMiddlewares(httpHandler, *route.Operation)
+
+		httpHandler, err := createHTTPHandler(method)
+		if err != nil {
+			return fmt.Errorf("failed to create http handler for %s.%s : %w", route.HandlerType, route.HandlerMethod,  err)
+		}
+
+		httpHandler, err = ApplyMiddlewares(httpHandler, *route.Operation)
 		if err != nil {
 			return fmt.Errorf("failed to apply middlewares to handler: %w", err)
 		}
@@ -40,7 +46,10 @@ func RegisterRoutes(router *mux.Router, handler any, handlerFile string) error {
 	return nil
 }
 
-func createHTTPHandler(method reflect.Value, route *RouteMetadata) http.HandlerFunc {
+func createHTTPHandler(method reflect.Value) (http.HandlerFunc, error ){
+	if !isHTTPHandlerFunc(method) {
+			return nil, errors.New("method is not a http.HandlerFunc")
+	}
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Prepare arguments as a slice of reflect.Value
 		args := []reflect.Value{
@@ -48,5 +57,11 @@ func createHTTPHandler(method reflect.Value, route *RouteMetadata) http.HandlerF
 			reflect.ValueOf(r),
 		}
 		method.Call(args)
-	}
+	}, nil
+}
+
+// isHTTPHandlerFunc checks if a reflect.Value is an http.HandlerFunc
+func isHTTPHandlerFunc(funcValue reflect.Value) bool {
+	f:=func(w http.ResponseWriter, r *http.Request) {}
+	return funcValue.Type()==reflect.TypeOf(f)
 }

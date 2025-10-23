@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to register routes: %v", err)
 	}
-	log.Println("Server starting on :8089")
-	log.Println("Try: curl http://localhost:8089/person/123")
-	log.Fatal(http.ListenAndServe(":8089", router))
+	log.Println("Server starting on :8090")
+	log.Println("Try: curl http://localhost:8090/person/123")
+	log.Fatal(http.ListenAndServe(":8090", router))
 }
