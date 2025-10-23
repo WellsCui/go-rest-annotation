@@ -18,6 +18,7 @@ func TestRegisterRoutes(t *testing.T) {
 		RegisterMiddleware("PersonMiddleWare", person.PersonMiddleWare)
 		err := RegisterRoutes(router, handler, "../person/handler.go")
 		require.NoError(t, err)
+		require.NotNil(t, router.Get("person.Handler.GetPersonHTTP"))
 		req := httptest.NewRequest("GET", "/person/bill", nil)
 		res := httptest.NewRecorder()
 		router.ServeHTTP(res, req)

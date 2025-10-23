@@ -33,8 +33,9 @@ func RegisterRoutes(router *mux.Router, handler any, handlerFile string) error {
 		if err != nil {
 			return fmt.Errorf("failed to apply middlewares to handler: %w", err)
 		}
-		router.HandleFunc(route.Operation.Path, httpHandler).Methods(route.Operation.Method)
-		log.Printf("Registered route: %s %s -> %s", route.Operation.Method, route.Operation.Path, route.HandlerMethod)
+		routeName:=fmt.Sprintf("%s.%s.%s", route.PackagePath, route.HandlerType, route.HandlerMethod)
+		router.HandleFunc(route.Operation.Path, httpHandler).Methods(route.Operation.Method).Name(routeName)
+		log.Printf("Registered route %s: %s %s -> %s", routeName, route.Operation.Method, route.Operation.Path, route.HandlerMethod)
 	}
 	return nil
 }
