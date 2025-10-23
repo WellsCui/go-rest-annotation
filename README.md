@@ -3,13 +3,13 @@ This Repo provides a way to register routes via adding annotation on handler fun
 
 ## Register route via annotation
 ```go
-// GetPersonHTTP is the HTTP handler wrapper for getPerson
+// GetPersonHTTP is the HTTP handler for getting a person
 // @RestOperation( method = "GET", path = "/person/{uid}", middlewares = ["PersonMiddleWare" "AnotherMiddleWare"], timeout = 30, disableAuth = true )
 func (s *Handler) GetPersonHTTP(w http.ResponseWriter, r *http.Request) {
 	
 }
 
-// PostPersonHTTP is the HTTP handler wrapper for post a Person
+// PostPersonHTTP is the HTTP handler for posting a person
 // @RestOperation( method = "POST", path = "/person", middlewares = ["PersonMiddleWare" "AnotherMiddleWare"], timeout = 30, disableAuth = true )
 func (s *Handler) PostPersonHTTP(w http.ResponseWriter, r *http.Request) {
 	
