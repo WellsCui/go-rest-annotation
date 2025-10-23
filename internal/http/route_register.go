@@ -11,7 +11,7 @@ import (
 
 // RegisterRoutes parses annotations from handlerFile and registers routes on the router using reflection.
 func RegisterRoutes(router *mux.Router, handler any, handlerFile string) error {
-	routes, err := ParseRoutes(handlerFile)
+	routes, err := ParseRouteMetadata(handlerFile)
 	if err != nil {
 		return fmt.Errorf("failed to parse routes: %w", err)
 	}
@@ -46,6 +46,6 @@ func createHTTPHandler(method reflect.Value, route *RouteMetadata) http.HandlerF
 			reflect.ValueOf(w),
 			reflect.ValueOf(r),
 		}
-        method.Call(args)
+		method.Call(args)
 	}
 }

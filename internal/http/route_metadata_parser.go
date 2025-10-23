@@ -15,8 +15,8 @@ type RouteMetadata struct {
 	PackagePath   string
 }
 
-// ParseRoutes parses a Go source file and extracts route metadata from @RestOperation annotations.
-func ParseRoutes(filePath string) ([]*RouteMetadata, error) {
+// ParseRouteMetadata parses a Go source file and extracts route metadata from @RestOperation annotations.
+func ParseRouteMetadata(filePath string) ([]*RouteMetadata, error) {
 	fset := token.NewFileSet()
 	file, err := parser.ParseFile(fset, filePath, nil, parser.ParseComments)
 	if err != nil {

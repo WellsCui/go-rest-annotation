@@ -20,7 +20,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 1)
 		assert.Equal(t, "GET", routes[0].Operation.Method)
@@ -43,7 +43,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 2)
 		assert.Equal(t, "GET", routes[0].Operation.Method)
@@ -62,7 +62,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 1)
 		assert.Equal(t, "GET", routes[0].Operation.Method)
@@ -82,7 +82,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 1)
 		assert.Equal(t, "Service", routes[0].HandlerType)
@@ -96,7 +96,7 @@ func test() {}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 1)
 		assert.Equal(t, "test", routes[0].HandlerMethod)
@@ -115,13 +115,13 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		assert.Len(t, routes, 0)
 	})
 
 	t.Run("returns error for invalid file path", func(t *testing.T) {
-		routes, err := ParseRoutes("/nonexistent/file.go")
+		routes, err := ParseRouteMetadata("/nonexistent/file.go")
 		assert.Error(t, err)
 		assert.Nil(t, routes)
 		assert.Contains(t, err.Error(), "failed to parse file")
@@ -137,7 +137,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		assert.Error(t, err)
 		assert.Nil(t, routes)
 		assert.Contains(t, err.Error(), "failed to parse annotation")
@@ -155,7 +155,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		require.Len(t, routes, 1)
 		assert.Equal(t, "GET", routes[0].Operation.Method)
@@ -172,7 +172,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		if len(routes) == 0 {
 			t.Skip("No routes found, testing extractReceiverType directly")
@@ -188,7 +188,7 @@ type Service struct{}
 `
 		tmpFile := createTempFile(t, content)
 		defer os.Remove(tmpFile)
-		routes, err := ParseRoutes(tmpFile)
+		routes, err := ParseRouteMetadata(tmpFile)
 		require.NoError(t, err)
 		if len(routes) == 0 {
 			t.Skip("No routes found, testing extractReceiverType directly")
