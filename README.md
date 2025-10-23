@@ -1,5 +1,5 @@
 # go-rest-annotation
-This Repo demos route registration using comment on handler function as annotation.
+This Repo provides a way to register routes based on annotation comment on handler functions.
 
 ## Register route via annotation
 ```go
