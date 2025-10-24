@@ -17,10 +17,15 @@ func (h *Handler) Get(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// @RestOperation( method = "POST", path = "/person", middlewares = ["TestMiddleWare"], timeout = 30, disableAuth = true )
+func (h *Handler) Post(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 // handler2 for testing invalid method
 type handler2 struct{}
 
-// @RestOperation( method = "GET", path = "/person/{uid}", middlewares = ["TestMiddleWare"], timeout = 30, disableAuth = true )
+// @RestOperation( method = "GET", path = "/person", middlewares = ["TestMiddleWare"], timeout = 30, disableAuth = true )
 func (h *handler2) Get() {
 	
 }
@@ -40,8 +45,13 @@ func TestRegisterRoutes(t *testing.T) {
 		err := RegisterRoutes(router, handler, "./route_register_test.go")
 		require.NoError(t, err)
 		require.NotNil(t, router.Get("http.Handler.Get"))
+		require.NotNil(t, router.Get("http.Handler.Post"))
 		req := httptest.NewRequest("GET", "/person/bill", nil)
 		res := httptest.NewRecorder()
+		router.ServeHTTP(res, req)
+		assert.Equal(t, http.StatusOK, res.Code)
+		req = httptest.NewRequest("POST", "/person", nil)
+		res = httptest.NewRecorder()
 		router.ServeHTTP(res, req)
 		assert.Equal(t, http.StatusOK, res.Code)
 	})
