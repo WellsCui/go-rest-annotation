@@ -61,7 +61,7 @@ func TestRegisterRoutes(t *testing.T) {
 		handler := Handler{}
 		err := RegisterRoutes(router, handler, "./route_register_test.go")
 		require.Error(t, err)
-		assert.Contains(t, err.Error(), "handler must be a struct or pointer to struct")
+		assert.Contains(t, err.Error(), "handler must be a pointer to struct")
 	})
 
 	t.Run("returns error when file does not exist", func(t *testing.T) {

@@ -27,7 +27,7 @@ type Service struct{}
 		assert.Equal(t, "/users", routes[0].Operation.Path)
 		assert.Equal(t, "getUsers", routes[0].HandlerMethod)
 		assert.Equal(t, "Service", routes[0].HandlerType)
-		assert.Equal(t, "main", routes[0].PackagePath)
+		assert.Equal(t, "main", routes[0].Package)
 	})
 
 	t.Run("parses file with multiple routes", func(t *testing.T) {

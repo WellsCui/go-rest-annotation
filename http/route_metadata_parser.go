@@ -12,7 +12,7 @@ type RouteMetadata struct {
 	Operation     *RestOperation
 	HandlerMethod string
 	HandlerType   string
-	PackagePath   string
+	Package       string
 }
 
 // ParseRouteMetadata parses a Go source file and extracts route metadata from @RestOperation annotations.
@@ -39,7 +39,7 @@ func ParseRouteMetadata(filePath string) ([]*RouteMetadata, error) {
 			metadata := &RouteMetadata{
 				Operation:     op,
 				HandlerMethod: fn.Name.Name,
-				PackagePath:   file.Name.Name,
+				Package:       file.Name.Name,
 			}
 			if fn.Recv != nil && len(fn.Recv.List) > 0 {
 				metadata.HandlerType = extractReceiverType(fn.Recv.List[0])
