@@ -67,7 +67,7 @@ func TestRegisterRoutes(t *testing.T) {
 	t.Run("returns error when go file does not match", func(t *testing.T) {
 		router := mux.NewRouter()
 		handler := &Handler{}
-		err := RegisterRoutes(router, handler, "../person/handler.go")
+		err := RegisterRoutes(router, handler, "../example/person/handler.go")
 		require.Error(t, err)
 		assert.Contains(t, err.Error(), "method GetPersonHTTP not found in handler Handler")
 	})
