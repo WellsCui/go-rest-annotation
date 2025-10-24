@@ -18,9 +18,10 @@ func RegisterRoutes(router *mux.Router, handler any, handlerFile string) error {
 	}
 	handlerValue := reflect.ValueOf(handler)
 	handlerType := reflect.TypeOf(handler)
-	if handlerType.Kind() == reflect.Ptr {
-		handlerType = handlerType.Elem()
+	if handlerType.Kind() != reflect.Ptr || handlerType.Elem().Kind() != reflect.Struct {
+		return fmt.Errorf("handler must be a pointer to struct")
 	}
+	handlerType = handlerType.Elem()
 	for _, route := range routes {
 		if route.HandlerType != "" && route.HandlerType != handlerType.Name() {
 			continue
